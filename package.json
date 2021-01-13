@@ -3,11 +3,16 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+    "dev": "nodemon -x  'ts-node src/index.ts' "
+  },
   "dependencies": {
     "express": "^4.17.1",
     "inversify": "^5.0.5",
     "inversify-express-utils": "^6.3.2",
     "mongoose": "^5.11.10",
+    "mysql": "^2.18.1",
+    "nodemon": "^2.0.7",
     "reflect-metadata": "^0.1.13",
     "typeorm": "^0.2.29",
     "uuid": "^8.3.2"
