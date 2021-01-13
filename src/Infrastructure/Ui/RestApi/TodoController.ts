@@ -1,5 +1,4 @@
 import { Response, Request } from 'express';
-import { httpGet, httpPost, request, requestParam, response, controller, interfaces } from 'inversify-express-utils';
 
 //presistance
 import { MongooseTodoRepository } from '../../Presistance/Mongoose/MongooseTodoRepository';
@@ -17,19 +16,18 @@ import {CommandUpdateTodo } from '../../../Application/Command/CommandUpdateTodo
 import {CommandDeleteTodo } from '../../../Application/Command/CommandDeleteTodo';
 import { CommandGetTodos  } from '../../../Application/Command/CommandGetTodos';
 
-@controller('/')
-export class TodoController implements interfaces.Controller{
+export class TodoController{
     
-    @httpGet('')
     async getAllTodo(
-        @request() req: Request, @response() res: Response
+        req: Request,
+        res: Response
     ){
         try{
             const result = new CommandGetTodos(
-                new MongooseTodoRepository(),
+                new TypeormTodoRepository(),
                 new ObjectDataTransformer()
             ).execute();
-
+            
             res.json({
                 data: result
             })
@@ -43,16 +41,14 @@ export class TodoController implements interfaces.Controller{
         }
     }
 
-
-    @httpGet(':id')
     async getTodoById(
-        @request() req: Request, 
-        @response() res: Response,
-        @requestParam('id') id: string
+        req: Request, 
+        res: Response
     ){
         try {
+            const id = req.params.id;
             const result = await new  CommandGetTodos(
-                new MongooseTodoRepository(),
+                new TypeormTodoRepository(),
                 new ObjectDataTransformer()
             ).execute(id);
             res.json({
@@ -68,13 +64,13 @@ export class TodoController implements interfaces.Controller{
         }
     }
 
-    @httpPost('add')
     async createTodo(
-        @request() req: Request, @response() res: Response
+        req: Request,
+        res: Response
     ){
        try {
            const result = await new CommandAddTodo(
-                new MongooseTodoRepository(),
+                new TypeormTodoRepository(),
                 new ObjectDataTransformer()
             ) .execute({
                ...req.body
@@ -92,10 +88,7 @@ export class TodoController implements interfaces.Controller{
        }     
     }
 
-    @httpPost('update')
-    async updateTodo(
-       @request() req: Request, 
-       @response() res: Response,
+    async updateTodo(req: Request,  res: Response,
     ){
        try {
             const id: string = req.body.id;
@@ -105,7 +98,7 @@ export class TodoController implements interfaces.Controller{
                 status: req.body.status
             }
             const result = await  new CommandUpdateTodo(
-                new MongooseTodoRepository(),
+                new TypeormTodoRepository(),
                 new ObjectDataTransformer()
             ).execute(id, input);
             res.json({
@@ -121,15 +114,15 @@ export class TodoController implements interfaces.Controller{
        }     
     }
 
-    @httpGet('delete/:id')
     async deleteTodo(
-       @request() req: Request, 
-       @response() res: Response,
-       @requestParam('id') id: string
+      req: Request, 
+      res: Response,
     ){
        try {
+            const id = req.params.id;
+
             const result =  await new CommandDeleteTodo(
-                new MongooseTodoRepository()
+                new TypeormTodoRepository()
             ).execute(id);
             res.json({
                 data: result

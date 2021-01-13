@@ -1,8 +1,6 @@
-import {injectable} from 'inversify';
 import {TodoEntity} from '../../Domain/Entity/TodoEntity';
 import { TodoDataTransformerImpl } from './TodoDataTransformerImpl';
 
-@injectable()
 class ObjectDataTransformer implements TodoDataTransformerImpl{
     
     private data: any;

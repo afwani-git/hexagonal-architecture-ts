@@ -1,24 +1,27 @@
 import { injectable } from 'inversify';
-import { EntityRepository, getRepository, Repository } from 'typeorm';
-import Todo from './TodoEntity.entites';
+import { EntityRepository, Connection, getRepository, Repository } from 'typeorm';
+import { TodoEntity } from './TodoEntity.entites';
 import { TodoRepositoryImpl } from '../../../Ports/TodoRepositoryImpl';
 import { TodoFactory } from '../../../Domain/TodoFactory';
 import { TodoInputDto } from '../../../Application/Dto/TodoInputDto';
+import { TypeOrmConn } from './TypeOrmConn';
 
 @injectable()
-@EntityRepository(Todo)
+@EntityRepository(TodoEntity)
 class TypeormTodoRepository  implements TodoRepositoryImpl{
     
-    private repo: Repository<Todo>
+    private connection: Promise<Connection> = TypeOrmConn.getIstance();
 
-    constructor(){
-        const repo = getRepository(Todo);
+    constructor(){}
+
+    private async repo(){
+        return (await this.connection).getRepository(TodoEntity);
     }
 
     async getTodos(id: string){
         let result: any[] = [];
 
-        const query = this.repo.createQueryBuilder('todos');
+        const query = (await this.repo()).createQueryBuilder('todo');
 
         if(id){
             query.where(id);
@@ -43,9 +46,9 @@ class TypeormTodoRepository  implements TodoRepositoryImpl{
     }
 
     async addTodo(data: TodoInputDto){
-        const entity =  this.repo.create(data);
+        const entity =  (await this.repo()).create(data);
 
-        const result = await this.repo.save(entity);
+        const result = await (await this.repo()).save(entity);
 
         return new TodoFactory().create({
             ...result,
@@ -58,7 +61,7 @@ class TypeormTodoRepository  implements TodoRepositoryImpl{
 
         if(!isExist) throw new Error('todo not found');
 
-        const isEffected = (await this.repo.update({ id },{ ...data })).affected;
+        const isEffected = (await (await this.repo()).update({ id },{ ...data })).affected;
         
         if(isEffected){
             return this.getTodos(id)[0];
@@ -66,7 +69,7 @@ class TypeormTodoRepository  implements TodoRepositoryImpl{
     }
 
     async deletTodo(id: string){
-        const result = await (await this.repo.delete({ id })).affected;
+        const result = await (await (await this.repo()).delete({ id })).affected;
         return result == 1 ? true : false ;
     }
 }

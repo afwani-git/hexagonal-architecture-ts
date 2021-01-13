@@ -1,39 +1,36 @@
-import {Container, ContainerModule} from 'inversify';
-import 'reflect-metadata';
-import { InversifyExpressServer } from 'inversify-express-utils';
-import { urlencoded, json } from 'express';
-import { MongooseDatabase } from './Config/Databases/Mongoose';
-import { Databases } from './Config/Databases/DatabasesImpl';
-import "./Infrastructure/Ui/RestApi/TodoController";
+import { BootsrapingServer } from './Infrastructure/Ui/BootstrapingServer';
+import { BootsrapingDatabases } from '../src/Infrastructure/Presistance/BootstrapingPresistance';
+
+//server
+import { ExpressServer } from '../src/Infrastructure/Ui/RestApi/Server';
+
+//presistance
+import {TypeOrmConn } from '../src/Infrastructure/Presistance/Typeorm/TypeOrmConn';
 
 class Server{
-    private server: InversifyExpressServer;
-    private container: Container;
 
     constructor(
-        private database: Databases
+        private servers: BootsrapingServer[],
+        private databases: BootsrapingDatabases[]
     ){
-        this.database.initDatabases();
-        this.container = new Container()
-        this.server = new InversifyExpressServer(this.container);
     }
 
-
     run(){
-        this.server.setConfig((app) => {
-            app.use(urlencoded({
-                extended: true
-            }));
+        this.databases.forEach(async database => {
+            await database.run()
+        })
 
-            app.use(json());
-        });
-
-        const app = this.server.build();
-
-        app.listen(8080,() => {
-            console.log('app running 8080');
+        this.servers.forEach(server => {
+            server.initServer();
         })
     }
 }
 
-new Server(new MongooseDatabase()).run();
+new Server(
+    [
+        new ExpressServer()
+    ],
+    [   
+        new TypeOrmConn()
+    ]
+).run();

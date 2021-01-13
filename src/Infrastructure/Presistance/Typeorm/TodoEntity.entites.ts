@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity('Todos')
-export default class TodoEntity{
+export  class TodoEntity{
     
     @PrimaryGeneratedColumn('uuid')
     id: string;
@@ -15,6 +15,7 @@ export default class TodoEntity{
     @Column()
     status: string;
 
-    @Column()
+    @Column({ type: "timestamp", default: () => 'CURRENT_TIMESTAMP'})
     created_at: Date;
 }
+ 
