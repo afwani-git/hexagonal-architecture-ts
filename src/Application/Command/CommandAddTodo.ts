@@ -3,7 +3,6 @@ import {TodoRepositoryImpl } from '../../Ports/TodoRepositoryImpl';
 import { TodoDataTransformerImpl } from '../Transformer/TodoDataTransformerImpl'
 import {inject, injectable} from 'inversify';
 
-@injectable()
 class CommandAddTodo{
     constructor(
         private todoRepo: TodoRepositoryImpl,

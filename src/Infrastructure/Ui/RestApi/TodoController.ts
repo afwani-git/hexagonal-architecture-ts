@@ -1,7 +1,7 @@
 import { Response, Request } from 'express';
 
 //presistance
-import { MongooseTodoRepository } from '../../Presistance/Mongoose/MongooseTodoRepository';
+// import { MongooseTodoRepository } from '../../Presistance/Mongoose/MongooseTodoRepository';
 import { TypeormTodoRepository } from '../../Presistance/Typeorm/TypeormTodoRepository';
 
 //tansformer
@@ -23,7 +23,7 @@ export class TodoController{
         res: Response
     ){
         try{
-            const result = new CommandGetTodos(
+            const result = await new CommandGetTodos(
                 new TypeormTodoRepository(),
                 new ObjectDataTransformer()
             ).execute();

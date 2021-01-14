@@ -24,7 +24,7 @@ class TypeormTodoRepository  implements TodoRepositoryImpl{
         const query = (await this.repo()).createQueryBuilder('todo');
 
         if(id){
-            query.where(id);
+            query.where("todo.id=:id", { id });
         }
         
         const data = await query.getMany();

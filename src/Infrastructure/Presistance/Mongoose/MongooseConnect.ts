@@ -1,9 +1,8 @@
 import * as mongoose from 'mongoose';
-import { Databases } from './DatabasesImpl';
+import { BootsrapingDatabases } from '../BootstrapingPresistance';
 
-class MongooseDatabase implements Databases{
-
-    async initDatabases(){
+export class MongooseConn implements BootsrapingDatabases{
+    async run(){
         try {
             await mongoose.connect('mongodb://localhost:27017/hexagonal', { useNewUrlParser: true, useFindAndModify: false, useUnifiedTopology: true });
             console.log("database connected !");
@@ -11,7 +10,4 @@ class MongooseDatabase implements Databases{
           console.log(error);
         }
     }
-
 }
-
-export { MongooseDatabase }

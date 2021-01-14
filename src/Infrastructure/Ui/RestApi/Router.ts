@@ -7,7 +7,7 @@ const router = Router({
 const controller = new TodoController();
 
 router.get('/', controller.getAllTodo);
-router.get(':id', controller.getTodoById);
+router.get('/:id', controller.getTodoById);
 router.post('/add',controller.createTodo);
 router.post('/update', controller.updateTodo);
 router.delete('/delete/:id', controller.deleteTodo);

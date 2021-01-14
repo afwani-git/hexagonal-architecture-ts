@@ -1,4 +1,3 @@
-import { injectable } from 'inversify';
 import { v4 } from 'uuid';
 import { TodoFactory } from '../../../Domain/TodoFactory';
 import  { TodoModel, TodoModelImpl,  } from './TodoModel';
@@ -6,7 +5,6 @@ import { TodoEntity } from '../../../Domain/Entity/TodoEntity';
 import { TodoRepositoryImpl } from '../../../Ports/TodoRepositoryImpl';
 import {TodoInputDto} from '../../../Application/Dto/TodoInputDto';
 
-@injectable()
 class MongooseTodoRepository implements TodoRepositoryImpl{
     private model: typeof TodoModel
 
@@ -32,7 +30,7 @@ class MongooseTodoRepository implements TodoRepositoryImpl{
                 status: doc.status,
                 created_at: doc.created_at.toString(),
             }));
-        })
+        });
         
         return result;
     }

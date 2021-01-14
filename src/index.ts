@@ -6,6 +6,7 @@ import { ExpressServer } from '../src/Infrastructure/Ui/RestApi/Server';
 
 //presistance
 import {TypeOrmConn } from '../src/Infrastructure/Presistance/Typeorm/TypeOrmConn';
+import { MongooseConn } from '../src/Infrastructure/Presistance/Mongoose/MongooseConnect';
 
 class Server{
 
@@ -32,5 +33,6 @@ new Server(
     ],
     [   
         new TypeOrmConn()
+        // new MongooseConn()
     ]
 ).run();
