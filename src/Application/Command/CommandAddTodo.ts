@@ -1,7 +1,6 @@
 import {TodoInputDto} from '../Dto/TodoInputDto';
 import {TodoRepositoryImpl } from '../../Ports/TodoRepositoryImpl';
 import { TodoDataTransformerImpl } from '../Transformer/TodoDataTransformerImpl'
-import {inject, injectable} from 'inversify';
 
 class CommandAddTodo{
     constructor(

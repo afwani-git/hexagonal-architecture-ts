@@ -3,9 +3,10 @@ import { BootsrapingDatabases } from '../src/Infrastructure/Presistance/Bootstra
 
 //server
 import { ExpressServer } from '../src/Infrastructure/Ui/RestApi/Server';
+import {  GraphqlServer  } from '../src/Infrastructure/Ui/Graphql/Server';
 
 //presistance
-import {TypeOrmConn } from '../src/Infrastructure/Presistance/Typeorm/TypeOrmConn';
+//import {TypeOrmConn } from '../src/Infrastructure/Presistance/Typeorm/TypeOrmConn';
 import { MongooseConn } from '../src/Infrastructure/Presistance/Mongoose/MongooseConnect';
 
 class Server{
@@ -21,18 +22,19 @@ class Server{
             await database.run()
         })
 
-        this.servers.forEach(server => {
-            server.initServer();
+        this.servers.forEach(async server => {
+            await server.initServer();
         })
     }
 }
 
 new Server(
     [
-        new ExpressServer()
+        new ExpressServer(),
+        new GraphqlServer()
     ],
     [   
-        new TypeOrmConn()
-        // new MongooseConn()
+//        new TypeOrmConn()
+         new MongooseConn()
     ]
 ).run();

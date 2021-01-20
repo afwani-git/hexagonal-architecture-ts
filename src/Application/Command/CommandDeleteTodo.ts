@@ -11,6 +11,8 @@ class CommandDeleteTodo{
 
         if(!isDeleted) throw new Error("todo id not found");
 
+        return true;
+
     }
 }
 

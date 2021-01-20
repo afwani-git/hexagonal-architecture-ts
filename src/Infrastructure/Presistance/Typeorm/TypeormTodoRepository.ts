@@ -1,4 +1,3 @@
-import { injectable } from 'inversify';
 import { EntityRepository, Connection, getRepository, Repository } from 'typeorm';
 import { TodoEntity } from './TodoEntity.entites';
 import { TodoRepositoryImpl } from '../../../Ports/TodoRepositoryImpl';
@@ -6,13 +5,10 @@ import { TodoFactory } from '../../../Domain/TodoFactory';
 import { TodoInputDto } from '../../../Application/Dto/TodoInputDto';
 import { TypeOrmConn } from './TypeOrmConn';
 
-@injectable()
 @EntityRepository(TodoEntity)
 class TypeormTodoRepository  implements TodoRepositoryImpl{
     
     private connection: Promise<Connection> = TypeOrmConn.getIstance();
-
-    constructor(){}
 
     private async repo(){
         return (await this.connection).getRepository(TodoEntity);

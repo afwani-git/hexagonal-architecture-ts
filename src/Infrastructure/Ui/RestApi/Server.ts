@@ -10,15 +10,15 @@ export class ExpressServer implements BootsrapingServer{
         this.app = express();
     }
 
-    initServer(){
+    async initServer(){
         
         this.app.use(urlencoded({ extended: true}));
         this.app.use(json());
 
         this.app.use('/', router);
 
-        this.app.listen(8080, () => {
-            console.log('express server start... ');
-        })
+        this.app.listen(8080);
+
+        console.log('express connected');
     }
 }
