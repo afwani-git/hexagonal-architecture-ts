@@ -53,7 +53,12 @@ class MongooseTodoRepository implements TodoRepositoryImpl{
     }
 
     async deletTodo(id: string){
-     return this.model.deleteOne({ id });
+     const result = await this.model.deleteOne({ id });
+     if(result.ok){
+         return true;
+     }else{
+         return false;
+     }
     }
 
 
@@ -68,7 +73,7 @@ class MongooseTodoRepository implements TodoRepositoryImpl{
             title: data.title,
             body: data.body,
             status: data.status,
-            created_at: result.created_at
+            created_at: null
         })
     }
 }
